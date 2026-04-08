@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Calculator</title>
+</head>
+<body>
+    <h2>Simple Calculator</h2>
+
+    <input type="number" id="a" placeholder="Enter A">
+    <input type="number" id="b" placeholder="Enter B">
+
+    <button onclick="calculate('add')">Add</button>
+    <button onclick="calculate('subtract')">Subtract</button>
+    <button onclick="calculate('multiply')">Multiply</button>
+    <button onclick="calculate('divide')">Divide</button>
+
+    <h3 id="result"></h3>
+
+    <script>
+        async function calculate(operation) {
+            const a = Number(document.getElementById("a").value);
+            const b = Number(document.getElementById("b").value);
+
+            const response = await fetch(`http://localhost:3000/${operation}`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({ a, b })
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                document.getElementById("result").innerText =
+                    "Result: " + data.result;
+            } else {
+                document.getElementById("result").innerText =
+                    "Error: " + data.error;
+            }
+        }
+    </script>
+</body>
+</html>
