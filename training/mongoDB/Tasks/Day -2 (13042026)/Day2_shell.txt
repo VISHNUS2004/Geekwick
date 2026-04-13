@@ -1,0 +1,1288 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+Install the latest PowerShell for new features and improvements! https://aka.ms/PSWindows
+
+PS C:\Users\kaush> mongosh
+Current Mongosh Log ID: 69dcbd153f5de34d4d3682d0
+Connecting to:          mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+2.8.2
+Using MongoDB:          8.2.6
+Using Mongosh:          2.8.2
+
+For mongosh info see: https://www.mongodb.com/docs/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2026-04-13T10:42:13.193+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> use internhub
+switched to db internhub
+internhub> db.interns.countDocuments()
+18
+internhub>      db.interns.aggregate([
+|       {
+|         $group: {
+|                   _id: "$department",
+|                  total: { $sum: 1 }
+|         }
+|       }
+| ])
+|
+[
+  { _id: 'HR', total: 2 },
+  { _id: null, total: 13 },
+  { _id: 'QA', total: 2 },
+  { _id: 'IT', total: 1 }
+]
+internhub>      db.interns.aggregate([
+|        {
+|                 $group: {
+|                 _id: null,
+|                   avgAge: { $avg: "$age" }
+|                   }
+|          }
+| ])
+|
+[ { _id: null, avgAge: 22 } ]
+internhub> db.employees.aggregate([
+|   {
+|     $group: {
+|       _id: "$department",
+|       totalEmployees: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+[
+  { _id: 'HR', totalEmployees: 3 },
+  { _id: null, totalEmployees: 9 },
+  { _id: 'IT', totalEmployees: 2 },
+  { _id: 'QA', totalEmployees: 1 }
+]
+internhub> db.tasks.aggregate([
+|   {
+|     $group: {
+|       _id: "$status",
+|       totalTasks: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+[ { _id: null, totalTasks: 1 }, { _id: 'Completed', totalTasks: 1 } ]
+internhub> db.employees.aggregate([
+|   {
+|     $group: {
+|       _id: "$department",
+|       avgSalary: { $avg: "$salary" }
+|     }
+|   }
+| ])
+|
+[
+  { _id: 'QA', avgSalary: 30000 },
+  { _id: 'HR', avgSalary: 25333.333333333332 },
+  { _id: null, avgSalary: 30000 },
+  { _id: 'IT', avgSalary: 45000 }
+]
+internhub> db.products.aggregate([
+|   {
+|     $group: {
+|       _id: "$category",
+|       totalStock: { $sum: "$stock" }
+|     }
+|   }
+| ])
+|
+[
+  { _id: 'Electronics', totalStock: 250 },
+  { _id: 'Furniture', totalStock: 2 }
+]
+internhub> db.interns.aggregate([
+|   {
+|     $match: { isActive: true }
+|   },
+|   {
+|     $group: {
+|       _id: "$department",
+|       total: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+[
+  { _id: 'IT', total: 1 },
+  { _id: 'HR', total: 2 },
+  { _id: 'QA', total: 2 }
+]
+internhub> db.employees.aggregate([
+|   {
+|     $group: {
+|       _id: "$department",
+|       maxSalary: { $max: "$salary" }
+|     }
+|   }
+| ])
+|
+[
+  { _id: 'IT', maxSalary: 50000 },
+  { _id: null, maxSalary: 40000 },
+  { _id: 'HR', maxSalary: 27000 },
+  { _id: 'QA', maxSalary: 30000 }
+]
+internhub> db.projects.aggregate([
+|   {
+|     $group: {
+|       _id: "$status",
+|       totalProjects: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+
+internhub> db.interns.aggregate([
+|   { $match: { isActive: true } },
+|   {
+|     $group: {
+|       _id: "$department",
+|       avgAge: { $avg: "$age" }
+|     }
+|   }
+| ])
+|
+[
+  { _id: 'QA', avgAge: 23 },
+  { _id: 'HR', avgAge: 20.5 },
+  { _id: 'IT', avgAge: 23 }
+]
+internhub>
+| db.tasks.aggregate([
+|   { $match: { isDeleted: false } },
+|   {
+|     $group: {
+|       _id: "$status",
+|       total: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+
+internhub> db.projects.aggregate([
+|   {
+|     $group: {
+|       _id: "$team",
+|       totalBudget: { $sum: "$budget" }
+|     }
+|   }
+| ])
+|
+
+internhub>
+| db.employees.aggregate([
+|   {
+|     $group: {
+|       _id: "$department",
+|       min: { $min: "$salary" },
+|       max: { $max: "$salary" },
+|       avg: { $avg: "$salary" }
+|     }
+|   }
+| ])
+|
+[
+  { _id: 'HR', min: 22000, max: 27000, avg: 25333.333333333332 },
+  { _id: null, min: 20000, max: 40000, avg: 30000 },
+  { _id: 'IT', min: 40000, max: 50000, avg: 45000 },
+  { _id: 'QA', min: 30000, max: 30000, avg: 30000 }
+]
+internhub> db.employees.aggregate([
+|   {
+|     $group: {
+|       _id: "$department",
+|       total: { $sum: 1 }
+|     }
+|   },
+|   { $sort: { total: -1 } },
+|   {
+|     $project: {
+|       department: "$_id",
+|       total: 1,
+|       _id: 0
+|     }
+|   }
+| ])
+|
+[
+  { total: 9, department: null },
+  { total: 3, department: 'HR' },
+  { total: 2, department: 'IT' },
+  { total: 1, department: 'QA' }
+]
+internhub> db.interns.aggregate([
+|   { $project: { name: 1, department: 1, age: 1 } }
+| ])
+|
+[
+  { _id: ObjectId('69d6170b8f440b09203682db'), name: 'Dev', age: 21 },
+  { _id: ObjectId('69d6170b8f440b09203682dc'), name: 'Sam' },
+  { _id: ObjectId('69d6170b8f440b09203682dd'), name: 'Riya' },
+  { _id: ObjectId('69d6170b8f440b09203682de'), name: 'Arjun', age: 23 },
+  { _id: ObjectId('69d6170b8f440b09203682df'), name: 'Meena' },
+  { _id: ObjectId('69d617148f440b09203682e0'), name: 'Kiran' },
+  { _id: ObjectId('69d6171e8f440b09203682e1'), name: 'Pooja' },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e4'),
+    name: 'Ishan',
+    age: 21,
+    department: 'HR'
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e5'),
+    name: 'prajwal',
+    age: 22,
+    department: 'QA'
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e6'),
+    name: 'shamanth',
+    age: 23,
+    department: 'IT'
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e7'),
+    name: 'deekshith',
+    age: 20,
+    department: 'HR'
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e8'),
+    name: 'akshay',
+    age: 24,
+    department: 'QA'
+  },
+  { _id: ObjectId('69d68eedb74862bcc63682d1'), name: 'akshay' },
+  { _id: ObjectId('69d68eedb74862bcc63682d2'), name: 'jaskirat' },
+  { _id: ObjectId('69d68eedb74862bcc63682d3'), name: 'hamza' },
+  { _id: ObjectId('69d68eedb74862bcc63682d4'), name: 'drisha' },
+  { _id: ObjectId('69d68eedb74862bcc63682d5'), name: 'mazari' },
+  { _id: ObjectId('69d69111b74862bcc63682e1'), name: 'Kiran' }
+]
+internhub>
+| db.employees.aggregate([
+|   { $sort: { salary: -1 } }
+| ])
+|
+[
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682de'),
+    name: 'Carry',
+    department: 'IT',
+    salary: 50000,
+    skills: [ 'React', 'NodeJS' ]
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682db'),
+    name: 'Tanmay',
+    department: 'IT',
+    salary: 40000,
+    skills: [ 'React', 'NodeJS' ]
+  },
+  { _id: ObjectId('69d69013b74862bcc63682de'), salary: 40000 },
+  { _id: ObjectId('69d69013b74862bcc63682dd'), salary: 35000 },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682dc'),
+    name: 'Prakhar',
+    department: 'QA',
+    salary: 30000,
+    skills: [ 'React', 'NodeJS' ]
+  },
+  {
+    _id: ObjectId('69d68fdcb74862bcc63682d9'),
+    name: 'E2',
+    salary: 30000
+  },
+  {
+    _id: ObjectId('69d69046b74862bcc63682df'),
+    name: 'A',
+    salary: 30000,
+    isDeleted: true
+  },
+  {
+    _id: ObjectId('69d68a643d0f8c0cb33682d1'),
+    name: 'Ravi',
+    department: 'HR',
+    salary: 27000,
+    location: 'Bangalore',
+    skills: [ 'React', 'NodeJS' ]
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682dd'),
+    name: 'Ashish',
+    department: 'HR',
+    salary: 27000,
+    location: 'Bangalore',
+    skills: [ 'React', 'NodeJS' ]
+  },
+  {
+    _id: ObjectId('69d68fdcb74862bcc63682d8'),
+    name: 'E1',
+    salary: 25000
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682da'),
+    name: 'Samay',
+    department: 'HR',
+    salary: 22000,
+    location: 'Bangalore',
+    skills: [ 'React', 'NodeJS' ]
+  },
+  { _id: ObjectId('69d69013b74862bcc63682dc'), salary: 20000 },
+  {
+    _id: ObjectId('69d616828f440b09203682d3'),
+    name: 'Amit',
+    role: 'Developer',
+    skills: [ 'React', 'NodeJS' ]
+  },
+  {
+    _id: ObjectId('69d616828f440b09203682d4'),
+    name: 'Sneha',
+    role: 'Tester',
+    email: 'sneha@gmail.com',
+    phone: '1234567890',
+    skills: [ 'React', 'NodeJS' ]
+  },
+  {
+    _id: ObjectId('69d616828f440b09203682d5'),
+    name: 'Ravi',
+    role: 'Manager',
+    skills: [ 'React', 'NodeJS' ]
+  }
+]
+internhub> db.products.aggregate([
+|   { $sort: { price: -1 } },
+|   { $limit: 3 }
+| ])
+|
+[
+  {
+    _id: ObjectId('69d616e48f440b09203682d9'),
+    name: 'Laptop',
+    price: 55000,
+    category: 'Electronics',
+    stock: 50,
+    discount: 10,
+    tags: [ 'New' ]
+  },
+  {
+    _id: ObjectId('69d616e48f440b09203682da'),
+    name: 'Phone',
+    price: 20000,
+    category: 'Electronics',
+    stock: 50,
+    discount: 10,
+    tags: [ 'New' ]
+  },
+  {
+    _id: ObjectId('69d68a983d0f8c0cb33682df'),
+    name: 'Laptop',
+    category: 'Electronics',
+    stock: 50,
+    tags: [ 'New' ]
+  }
+]
+internhub> db.interns.aggregate([
+|   { $match: { isActive: true } }
+| ])
+|
+[
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e4'),
+    name: 'Ishan',
+    age: 21,
+    department: 'HR',
+    isActive: true,
+    verified: true
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e5'),
+    name: 'prajwal',
+    age: 22,
+    department: 'QA',
+    isActive: true,
+    verified: true,
+    skills: [ 'Testing' ]
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e6'),
+    name: 'shamanth',
+    age: 23,
+    department: 'IT',
+    isActive: true,
+    verified: true
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e7'),
+    name: 'deekshith',
+    age: 20,
+    department: 'HR',
+    isActive: true,
+    verified: true
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e8'),
+    name: 'akshay',
+    age: 24,
+    department: 'QA',
+    isActive: true,
+    verified: true,
+    skills: [ 'Testing' ]
+  }
+]
+internhub> db.tasks.aggregate([
+|   {
+|     $group: {
+|       _id: "$priority",
+|       total: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+[ { _id: 'High', total: 1 }, { _id: null, total: 1 } ]
+internhub> db.employees.aggregate([
+|   { $sort: { salary: -1 } },
+|   { $limit: 5 }
+| ])
+|
+[
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682de'),
+    name: 'Carry',
+    department: 'IT',
+    salary: 50000,
+    skills: [ 'React', 'NodeJS' ]
+  },
+  { _id: ObjectId('69d69013b74862bcc63682de'), salary: 40000 },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682db'),
+    name: 'Tanmay',
+    department: 'IT',
+    salary: 40000,
+    skills: [ 'React', 'NodeJS' ]
+  },
+  { _id: ObjectId('69d69013b74862bcc63682dd'), salary: 35000 },
+  {
+    _id: ObjectId('69d68fdcb74862bcc63682d9'),
+    name: 'E2',
+    salary: 30000
+  }
+]
+internhub> db.interns.aggregate([
+|   { $unwind: "$skills" },
+|   {
+|     $group: {
+|       _id: "$skills",
+|       count: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+[
+  { _id: 'Node', count: 2 },
+  { _id: 'NodeJS', count: 2 },
+  { _id: 'JS', count: 3 },
+  { _id: 'MongoDB', count: 6 },
+  { _id: 'Java', count: 1 },
+  { _id: 'Express', count: 1 },
+  { _id: 'Testing', count: 2 },
+  { _id: 'React', count: 2 }
+]
+internhub> db.tasks.aggregate([
+|   { $match: { status: "Pending" } },
+|   {
+|     $group: {
+|       _id: "$department",
+|       total: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+
+internhub> db.employees.aggregate([
+|   {
+|     $project: {
+|       name: 1,
+|       yearlySalary: { $multiply: ["$salary", 12] }
+|     }
+|   }
+| ])
+|
+[
+  {
+    _id: ObjectId('69d616828f440b09203682d3'),
+    name: 'Amit',
+    yearlySalary: null
+  },
+  {
+    _id: ObjectId('69d616828f440b09203682d4'),
+    name: 'Sneha',
+    yearlySalary: null
+  },
+  {
+    _id: ObjectId('69d616828f440b09203682d5'),
+    name: 'Ravi',
+    yearlySalary: null
+  },
+  {
+    _id: ObjectId('69d68a643d0f8c0cb33682d1'),
+    name: 'Ravi',
+    yearlySalary: 324000
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682da'),
+    name: 'Samay',
+    yearlySalary: 264000
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682db'),
+    name: 'Tanmay',
+    yearlySalary: 480000
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682dc'),
+    name: 'Prakhar',
+    yearlySalary: 360000
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682dd'),
+    name: 'Ashish',
+    yearlySalary: 324000
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682de'),
+    name: 'Carry',
+    yearlySalary: 600000
+  },
+  {
+    _id: ObjectId('69d68fdcb74862bcc63682d8'),
+    name: 'E1',
+    yearlySalary: 300000
+  },
+  {
+    _id: ObjectId('69d68fdcb74862bcc63682d9'),
+    name: 'E2',
+    yearlySalary: 360000
+  },
+  { _id: ObjectId('69d69013b74862bcc63682dc'), yearlySalary: 240000 },
+  { _id: ObjectId('69d69013b74862bcc63682dd'), yearlySalary: 420000 },
+  { _id: ObjectId('69d69013b74862bcc63682de'), yearlySalary: 480000 },
+  {
+    _id: ObjectId('69d69046b74862bcc63682df'),
+    name: 'A',
+    yearlySalary: 360000
+  }
+]
+internhub> db.employees.aggregate([
+|   {
+|     $group: {
+|       _id: "$department",
+|       avgSalary: { $avg: "$salary" }
+|     }
+|   },
+|   { $sort: { avgSalary: -1 } },
+|   { $limit: 3 }
+| ])
+|
+[
+  { _id: 'IT', avgSalary: 45000 },
+  { _id: 'QA', avgSalary: 30000 },
+  { _id: null, avgSalary: 30000 }
+]
+internhub> db.interns.aggregate([
+|   { $match: { isActive: true } },
+|   {
+|     $group: {
+|       _id: "$department",
+|       count: { $sum: 1 }
+|     }
+|   },
+|   { $sort: { count: -1 } }
+| ])
+|
+[
+  { _id: 'HR', count: 2 },
+  { _id: 'QA', count: 2 },
+  { _id: 'IT', count: 1 }
+]
+internhub> db.projects.aggregate([
+|   { $unwind: "$members" },
+|   {
+|     $group: {
+|       _id: "$members",
+|       totalProjects: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+
+internhub> db.tasks.aggregate([
+|   { $match: { isDeleted: false } },
+|   {
+|     $group: {
+|       _id: "$status",
+|       total: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+
+internhub>
+| db.employees.aggregate([
+|   {
+|     $project: {
+|       name: 1,
+|       department: 1,
+|       salary: 1,
+|       bonus: { $multiply: ["$salary", 0.1] }
+|     }
+|   }
+| ])
+|
+[
+  {
+    _id: ObjectId('69d616828f440b09203682d3'),
+    name: 'Amit',
+    bonus: null
+  },
+  {
+    _id: ObjectId('69d616828f440b09203682d4'),
+    name: 'Sneha',
+    bonus: null
+  },
+  {
+    _id: ObjectId('69d616828f440b09203682d5'),
+    name: 'Ravi',
+    bonus: null
+  },
+  {
+    _id: ObjectId('69d68a643d0f8c0cb33682d1'),
+    name: 'Ravi',
+    department: 'HR',
+    salary: 27000,
+    bonus: 2700
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682da'),
+    name: 'Samay',
+    department: 'HR',
+    salary: 22000,
+    bonus: 2200
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682db'),
+    name: 'Tanmay',
+    department: 'IT',
+    salary: 40000,
+    bonus: 4000
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682dc'),
+    name: 'Prakhar',
+    department: 'QA',
+    salary: 30000,
+    bonus: 3000
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682dd'),
+    name: 'Ashish',
+    department: 'HR',
+    salary: 27000,
+    bonus: 2700
+  },
+  {
+    _id: ObjectId('69d68a913d0f8c0cb33682de'),
+    name: 'Carry',
+    department: 'IT',
+    salary: 50000,
+    bonus: 5000
+  },
+  {
+    _id: ObjectId('69d68fdcb74862bcc63682d8'),
+    name: 'E1',
+    salary: 25000,
+    bonus: 2500
+  },
+  {
+    _id: ObjectId('69d68fdcb74862bcc63682d9'),
+    name: 'E2',
+    salary: 30000,
+    bonus: 3000
+  },
+  {
+    _id: ObjectId('69d69013b74862bcc63682dc'),
+    salary: 20000,
+    bonus: 2000
+  },
+  {
+    _id: ObjectId('69d69013b74862bcc63682dd'),
+    salary: 35000,
+    bonus: 3500
+  },
+  {
+    _id: ObjectId('69d69013b74862bcc63682de'),
+    salary: 40000,
+    bonus: 4000
+  },
+  {
+    _id: ObjectId('69d69046b74862bcc63682df'),
+    name: 'A',
+    salary: 30000,
+    bonus: 3000
+  }
+]
+internhub>
+| db.interns.aggregate([
+|   {
+|     $group: {
+|       _id: "$department",
+|       count: { $sum: 1 }
+|     }
+|   },
+|   { $sort: { count: -1 } },
+|   { $limit: 1 }
+| ])
+|
+[ { _id: null, count: 13 } ]
+internhub> db.employees.createIndex({ email: 1 })
+email_1
+internhub> db.employees.getIndexes()
+[
+  { v: 2, key: { _id: 1 }, name: '_id_' },
+  { v: 2, key: { email: 1 }, name: 'email_1' }
+]
+internhub> db.interns.createIndex({ department: 1 })
+department_1
+internhub> db.tasks.createIndex({ status: 1 })
+status_1
+internhub> db.products.getIndexes()
+[ { v: 2, key: { _id: 1 }, name: '_id_' } ]
+internhub> db.employees.createIndex({ email: 1 }, { unique: true })
+MongoServerError[IndexKeySpecsConflict]: An existing index has the same name as the requested index. When index names are not specified, they are auto generated and can cause conflicts. Please refer to our documentation. Requested index: { v: 2, unique: true, key: { email: 1 }, name: "email_1" }, existing index: { v: 2, key: { email: 1 }, name: "email_1" }
+internhub> db.employees.createIndex({ email-ID: 1 }, { unique: true })
+Uncaught:
+SyntaxError: Unexpected token, expected "," (1:32)
+
+> 1 | db.employees.createIndex({ email-ID: 1 }, { unique: true })
+    |                                 ^
+  2 |
+
+internhub> db.employees.createIndex({ emailid: 1 }, { unique: true })
+MongoServerError[DuplicateKey]: Index build failed: 21356928-495f-445c-857b-cea6a43178a0: Collection internhub.employees ( 426380b3-02d7-4e8c-9054-7051f178847e ) :: caused by :: E11000 duplicate key error collection: internhub.employees index: emailid_1 dup key: { emailid: null }
+internhub> db.employees.createIndex({ email: 1 }, { unique: true })
+MongoServerError[IndexKeySpecsConflict]: An existing index has the same name as the requested index. When index names are not specified, they are auto generated and can cause conflicts. Please refer to our documentation. Requested index: { v: 2, unique: true, key: { email: 1 }, name: "email_1" }, existing index: { v: 2, key: { email: 1 }, name: "email_1" }
+internhub> db.employees.createIndex({ department: 1, salary: 1 })
+department_1_salary_1
+internhub> db.tasks.createIndex({ projectId: 1 })
+projectId_1
+internhub> db.tasks.createIndex({ isDeleted: 1 })
+isDeleted_1
+internhub> db.tasks.createIndex({ status: 1, priority: 1 })
+status_1_priority_1
+internhub> db.employees.createIndex({ email: 1 }, { unique: true })
+MongoServerError[IndexKeySpecsConflict]: An existing index has the same name as the requested index. When index names are not specified, they are auto generated and can cause conflicts. Please refer to our documentation. Requested index: { v: 2, unique: true, key: { email: 1 }, name: "email_1" }, existing index: { v: 2, key: { email: 1 }, name: "email_1" }
+internhub> db.employees.createIndex({ email: 1 }, { unique: true })db.employees.createIndex({ department: 1, joinedDate: -1 })
+internhub> db.employees.createIndex({ department: 1, joinedDate: -1 })
+department_1_joinedDate_-1
+internhub> db.interns.find({ email: "test@mail.com" })
+
+internhub> db.tasks.find({ status: "Pending", priority: "High" })
+
+internhub> db.departments.insertMany([
+|   { _id: 1, name: "Engineering" },
+|   { _id: 2, name: "HR" },
+|   { _id: 3, name: "Marketing" }
+| ])
+|
+{ acknowledged: true, insertedIds: { '0': 1, '1': 2, '2': 3 } }
+internhub> db.interns.insertMany([
+|   { _id: 101, name: "Kaushik", age: 22, departmentId: 1 },
+|   { _id: 102, name: "kushal", age: 23, departmentId: 2 },
+|   { _id: 103, name: "Lekan", age: 21, departmentId: 3 }
+| ])
+|
+{ acknowledged: true, insertedIds: { '0': 101, '1': 102, '2': 103 } }
+internhub> db.interns.aggregate([
+|   {
+|     $lookup: {
+|       from: "departments",
+|       localField: "departmentId",
+|       foreignField: "_id",
+|       as: "departmentDetails"
+|     }
+|   }
+| ])
+|
+[
+  {
+    _id: ObjectId('69d6170b8f440b09203682db'),
+    name: 'Dev',
+    age: 21,
+    skills: [ 'MongoDB' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d6170b8f440b09203682dc'),
+    name: 'Sam',
+    skills: [ 'JS', 'MongoDB' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d6170b8f440b09203682dd'),
+    name: 'Riya',
+    address: { city: 'Bangalore', pin: 560001 },
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d6170b8f440b09203682de'),
+    name: 'Arjun',
+    age: 23,
+    skills: [ 'Java' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d6170b8f440b09203682df'),
+    name: 'Meena',
+    email: 'meena@gmail.com',
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d617148f440b09203682e0'),
+    name: 'Kiran',
+    address: { city: 'Hyderabad', pin: 500001 },
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d6171e8f440b09203682e1'),
+    name: 'Pooja',
+    skills: [ 'NodeJS', 'Express', 'MongoDB' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e4'),
+    name: 'Ishan',
+    age: 21,
+    department: 'HR',
+    isActive: true,
+    verified: true,
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e5'),
+    name: 'prajwal',
+    age: 22,
+    department: 'QA',
+    isActive: true,
+    verified: true,
+    skills: [ 'Testing' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e6'),
+    name: 'shamanth',
+    age: 23,
+    department: 'IT',
+    isActive: true,
+    verified: true,
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e7'),
+    name: 'deekshith',
+    age: 20,
+    department: 'HR',
+    isActive: true,
+    verified: true,
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e8'),
+    name: 'akshay',
+    age: 24,
+    department: 'QA',
+    isActive: true,
+    verified: true,
+    skills: [ 'Testing' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68eedb74862bcc63682d1'),
+    name: 'akshay',
+    skills: [ 'MongoDB', 'React' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68eedb74862bcc63682d2'),
+    name: 'jaskirat',
+    skills: [ 'JS', 'Node' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68eedb74862bcc63682d3'),
+    name: 'hamza',
+    skills: [ 'MongoDB', 'Node' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68eedb74862bcc63682d4'),
+    name: 'drisha',
+    skills: [ 'React' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d68eedb74862bcc63682d5'),
+    name: 'mazari',
+    skills: [ 'JS' ],
+    departmentDetails: []
+  },
+  {
+    _id: ObjectId('69d69111b74862bcc63682e1'),
+    name: 'Kiran',
+    address: { city: 'Bangalore' },
+    skills: [ 'MongoDB', 'NodeJS' ],
+    departmentDetails: []
+  },
+  {
+    _id: 101,
+    name: 'Kaushik',
+    age: 22,
+    departmentId: 1,
+    departmentDetails: [ { _id: 1, name: 'Engineering' } ]
+  },
+  {
+    _id: 102,
+    name: 'kushal',
+    age: 23,
+    departmentId: 2,
+    departmentDetails: [ { _id: 2, name: 'HR' } ]
+  }
+]
+Type "it" for more
+internhub> db.interns.aggregate([
+|   {
+|     $lookup: {
+|       from: "departments",
+|       localField: "departmentId",
+|       foreignField: "_id",
+|       as: "dept"
+|     }
+|   },
+|   {
+|     $project: {
+|       name: 1,
+|       dept: 1
+|     }
+|   }
+| ])
+|
+[
+  { _id: ObjectId('69d6170b8f440b09203682db'), name: 'Dev', dept: [] },
+  { _id: ObjectId('69d6170b8f440b09203682dc'), name: 'Sam', dept: [] },
+  { _id: ObjectId('69d6170b8f440b09203682dd'), name: 'Riya', dept: [] },
+  { _id: ObjectId('69d6170b8f440b09203682de'), name: 'Arjun', dept: [] },
+  { _id: ObjectId('69d6170b8f440b09203682df'), name: 'Meena', dept: [] },
+  { _id: ObjectId('69d617148f440b09203682e0'), name: 'Kiran', dept: [] },
+  { _id: ObjectId('69d6171e8f440b09203682e1'), name: 'Pooja', dept: [] },
+  { _id: ObjectId('69d68abe3d0f8c0cb33682e4'), name: 'Ishan', dept: [] },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e5'),
+    name: 'prajwal',
+    dept: []
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e6'),
+    name: 'shamanth',
+    dept: []
+  },
+  {
+    _id: ObjectId('69d68abe3d0f8c0cb33682e7'),
+    name: 'deekshith',
+    dept: []
+  },
+  { _id: ObjectId('69d68abe3d0f8c0cb33682e8'), name: 'akshay', dept: [] },
+  { _id: ObjectId('69d68eedb74862bcc63682d1'), name: 'akshay', dept: [] },
+  {
+    _id: ObjectId('69d68eedb74862bcc63682d2'),
+    name: 'jaskirat',
+    dept: []
+  },
+  { _id: ObjectId('69d68eedb74862bcc63682d3'), name: 'hamza', dept: [] },
+  { _id: ObjectId('69d68eedb74862bcc63682d4'), name: 'drisha', dept: [] },
+  { _id: ObjectId('69d68eedb74862bcc63682d5'), name: 'mazari', dept: [] },
+  { _id: ObjectId('69d69111b74862bcc63682e1'), name: 'Kiran', dept: [] },
+  {
+    _id: 101,
+    name: 'Kaushik',
+    dept: [ { _id: 1, name: 'Engineering' } ]
+  },
+  { _id: 102, name: 'kushal', dept: [ { _id: 2, name: 'HR' } ] }
+]
+Type "it" for more
+internhub> db.tasks.aggregate([
+|   {
+|     $lookup: {
+|       from: "employees",
+|       localField: "assignedTo",
+|       foreignField: "_id",
+|       as: "employeeDetails"
+|     }
+|   }
+| ])
+|
+[
+  {
+    _id: ObjectId('69d68fe9b74862bcc63682db'),
+    title: 'T2',
+    employeeDetails: []
+  },
+  {
+    _id: ObjectId('69d69105b74862bcc63682e0'),
+    title: 'Build API',
+    priority: 'High',
+    status: 'Completed',
+    dueDate: ISODate('2026-04-08T17:31:49.021Z'),
+    employeeDetails: []
+  }
+]
+internhub> db.interns.aggregate([
+|   {
+|     $lookup: {
+|       from: "departments",
+|       localField: "departmentId",
+|       foreignField: "_id",
+|       as: "dept"
+|     }
+|   },
+|   { $unwind: "$dept" },
+|   {
+|     $project: {
+|       name: 1,
+|       departmentName: "$dept.name"
+|     }
+|   }
+| ])
+|
+[
+  { _id: 101, name: 'Kaushik', departmentName: 'Engineering' },
+  { _id: 102, name: 'kushal', departmentName: 'HR' },
+  { _id: 103, name: 'Lekan', departmentName: 'Marketing' }
+]
+internhub> db.tasks.aggregate([
+|   {
+|     $lookup: {
+|       from: "employees",
+|       localField: "assignedTo",
+|       foreignField: "_id",
+|       as: "emp"
+|     }
+|   },
+|   { $unwind: "$emp" },
+|   {
+|     $project: {
+|       title: 1,
+|       employeeName: "$emp.name"
+|     }
+|   }
+| ])
+|
+
+internhub> db.employees.aggregate([
+|   {
+|     $lookup: {
+|       from: "departments",
+|       localField: "departmentId",
+|       foreignField: "_id",
+|       as: "dept"
+|     }
+|   },
+|   { $unwind: "$dept" },
+|   {
+|     $project: {
+|       employeeName: "$name",
+|       departmentName: "$dept.name"
+|     }
+|   }
+| ])
+|
+
+internhub> db.interns.aggregate([
+|   {
+|     $lookup: {
+|       from: "departments",
+|       localField: "departmentId",
+|       foreignField: "_id",
+|       as: "dept"
+|     }
+|   },
+|   { $unwind: "$dept" },
+|   {
+|     $match: { "dept.name": "Engineering" }
+|   }
+| ])
+|
+[
+  {
+    _id: 101,
+    name: 'Kaushik',
+    age: 22,
+    departmentId: 1,
+    dept: { _id: 1, name: 'Engineering' }
+  }
+]
+internhub> db.tasks.aggregate([
+|   {
+|     $lookup: {
+|       from: "projects",
+|       localField: "projectId",
+|       foreignField: "_id",
+|       as: "proj"
+|     }
+|   },
+|   { $unwind: "$proj" },
+|   {
+|     $project: {
+|       taskTitle: "$title",
+|       projectTitle: "$proj.title"
+|     }
+|   }
+| ])
+|
+
+internhub> db.interns.aggregate([
+|   {
+|     $lookup: {
+|       from: "departments",
+|       localField: "departmentId",
+|       foreignField: "_id",
+|       as: "dept"
+|     }
+|   },
+|   { $unwind: "$dept" },
+|   {
+|     $lookup: {
+|       from: "tasks",
+|       localField: "_id",
+|       foreignField: "assignedTo",
+|       as: "tasks"
+|     }
+|   },
+|   {
+|     $project: {
+|       internName: "$name",
+|       department: "$dept.name",
+|       tasks: 1
+|     }
+|   }
+| ])
+|
+[
+  {
+    _id: 101,
+    tasks: [],
+    internName: 'Kaushik',
+    department: 'Engineering'
+  },
+  { _id: 102, tasks: [], internName: 'kushal', department: 'HR' },
+  { _id: 103, tasks: [], internName: 'Lekan', department: 'Marketing' }
+]
+internhub> db.interns.aggregate([
+|   {
+|     $lookup: {
+|       from: "departments",
+|       localField: "departmentId",
+|       foreignField: "_id",
+|       as: "dept"
+|     }
+|   },
+|   { $unwind: "$dept" },
+|   {
+|     $group: {
+|       _id: "$dept.name",
+|       totalInterns: { $sum: 1 }
+|     }
+|   }
+| ])
+|
+[
+  { _id: 'HR', totalInterns: 1 },
+  { _id: 'Engineering', totalInterns: 1 },
+  { _id: 'Marketing', totalInterns: 1 }
+]
+internhub> db.employees.aggregate([
+|   {
+|     $lookup: {
+|       from: "departments",
+|       localField: "departmentId",
+|       foreignField: "_id",
+|       as: "dept"
+|     }
+|   },
+|   { $unwind: "$dept" },
+|   {
+|     $lookup: {
+|       from: "tasks",
+|       localField: "_id",
+|       foreignField: "assignedTo",
+|       as: "tasks"
+|     }
+|   },
+|   {
+|     $project: {
+|       employeeName: "$name",
+|       department: "$dept.name",
+|       totalTasks: { $size: "$tasks" }
+|     }
+|   }
+| ])
+|
+
+internhub> db.orders.aggregate([
+|   {
+|     $lookup: {
+|       from: "customers",
+|       localField: "customerId",
+|       foreignField: "_id",
+|       as: "cust"
+|     }
+|   },
+|   { $unwind: "$cust" },
+|   {
+|     $group: {
+|       _id: "$cust.name",
+|       totalAmount: { $sum: "$amount" }
+|     }
+|   }
+| ])
+|
+
+internhub> db.interns.aggregate([
+|   {
+|     $lookup: {
+|       from: "departments",
+|       localField: "departmentId",
+|       foreignField: "_id",
+|       as: "dept"
+|     }
+|   },
+|   { $unwind: "$dept" },
+|   {
+|     $project: {
+|       name: 1,
+|       department: "$dept.name"
+|     }
+|   }
+| ])
+[
+  { _id: 101, name: 'Kaushik', department: 'Engineering' },
+  { _id: 102, name: 'kushal', department: 'HR' },
+  { _id: 103, name: 'Lekan', department: 'Marketing' }
+]
+internhub>

@@ -1,0 +1,85 @@
+Topic 1: Aggregation Basics
+5 Basic Tasks
+1. Count total number of interns in the interns collection.
+2. Group interns by department and count how many are in each department.
+3. Find average age of all interns.
+4. Group employees by department and count total employees.
+5. Find total number of tasks for each status.
+5 Intermediate Tasks
+1. Find average salary by department from employees.
+2. Find total stock available per category from products.
+3. Count how many interns are active in each department.
+4. Find highest salary in each department.
+5. Find total number of projects in each status (Active, Pending, Completed).
+5 Advanced Tasks
+1. Find average age of active interns grouped by department.
+2. Count only non-deleted tasks grouped by status.
+3. Find total budget of projects grouped by team.
+4. Find minimum, maximum, and average salary for each department.
+5. Create an aggregation that returns only department name and total employee count
+sorted descending.
+Topic 2: Advanced Aggregation
+5 Basic Tasks
+1. Use $project to show only intern name, department, and age.
+2. Use $sort to show employees by salary descending.
+3. Use $limit to display top 3 expensive products.
+4. Use $match to show only active interns.
+5. Use $group and $sum to count tasks by priority.
+5 Intermediate Tasks
+1. Show top 5 highest paid employees using $sort and $limit.
+2. Unwind skills array from interns and count how many times each skill appears.
+3. Show only pending tasks and group them by department.
+4. Project employee name and a new field called yearlySalary = monthly salary × 12.
+5. Find top 3 departments with highest average salary.
+5 Advanced Tasks
+1. Create a pipeline to filter active interns, group by department, and sort by count
+descending.
+2. Unwind project members array and count how many projects each member is part
+of.
+3. Create a report showing task status count only for tasks not soft deleted.
+4. Build an aggregation that shows employee name, department, salary, and a
+computed bonus field.
+5. Create a pipeline that finds the department with the maximum number of interns.
+Topic 3: Indexing
+5 Basic Tasks
+1. Create an index on email in employees.
+2. View all indexes created on employees.
+3. Create an index on department in interns.
+4. Create an index on status in tasks.
+5. Check existing indexes in products.
+5 Intermediate Tasks
+1. Create a unique index on employee email.
+2. Create a compound index on department and salary.
+3. Create an index on projectId in tasks.
+4. Create an index on isDeleted in tasks.
+5. Explain which field should be indexed in interns if users often search by email.
+5 Advanced Tasks
+1. Identify 3 fields that should be indexed in an intern management system and justify
+why.
+2. Create a compound index for tasks on status and priority.
+3. Design indexing strategy for employees collection where search happens by email,
+department, and joinedDate.
+4. Compare when a single-field index is enough and when compound index is better.
+5. Write a short note on why too many indexes can also be harmful.
+Topic 4: Relationships and $lookup
+5 Basic Tasks
+1. Create departments collection with 3 department documents.
+2. Create interns collection with departmentId field.
+3. Use $lookup to join interns with departments.
+4. Show intern name with department details.
+5. Join tasks with employees using assignedTo.
+5 Intermediate Tasks
+1. Show all interns along with their department name.
+2. Show all tasks with assigned employee name.
+3. Join employees with departments and project only employee name + department
+name.
+4. Find all interns belonging to Engineering department after lookup.
+5. Join tasks with projects and display task title + project title.
+5 Advanced Tasks
+1. Join interns, departments, and tasks to show intern name, department, and assigned
+tasks.
+2. Find department-wise total interns using lookup + aggregation.
+3. Build a report showing employee name, department name, and number of tasks
+assigned.
+4. Join orders with customers and show customer name with total order amount.
+5. Create a multi-stage pipeline using $lookup, $unwind, and $project.
