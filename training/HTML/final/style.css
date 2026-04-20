@@ -1,0 +1,19 @@
+body {
+    background: #f4f4f4;
+}
+
+header, footer {
+    text-align: center;
+    background: black;
+    color: white;
+    padding: 10px;
+}
+
+.card {
+    border-radius: 10px;
+    transition: 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}

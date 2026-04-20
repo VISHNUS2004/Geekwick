@@ -1,0 +1,10 @@
+@mixin buttonStyle {
+    background: $primary;
+    padding: $padding;
+    border-radius: 5px;
+    color: white;
+}
+
+.btn {
+    @include buttonStyle;
+}

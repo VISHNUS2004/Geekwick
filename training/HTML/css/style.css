@@ -1,0 +1,79 @@
+/* Basic */
+body {
+    background-color: #f4f4f4;
+}
+
+h1 {
+    color: blue;
+}
+
+div {
+    padding: 20px;
+}
+
+.card {
+    border: 1px solid #ccc;
+}
+
+p {
+    font-size: 18px;
+}
+
+/* Intermediate */
+.center {
+    text-align: center;
+}
+
+button:hover {
+    background: black;
+    color: white;
+}
+
+.profile-card {
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px gray;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+table td, table th {
+    border: 1px solid black;
+    padding: 10px;
+}
+
+/* Advanced */
+.flex-container {
+    display: flex;
+    gap: 20px;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+.btn {
+    padding: 10px 20px;
+    background: blue;
+    color: white;
+    border-radius: 5px;
+}
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+footer {
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+}

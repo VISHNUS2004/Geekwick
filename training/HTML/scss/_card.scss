@@ -1,0 +1,12 @@
+.card {
+    padding: $padding;
+    border-radius: 10px;
+
+    h3 {
+        color: $primary;
+    }
+
+    button {
+        @include buttonStyle;
+    }
+}
