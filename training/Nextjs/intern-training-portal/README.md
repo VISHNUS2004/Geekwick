@@ -33,6 +33,10 @@ It demonstrates routing, reusable components, nested layouts, and UI enhancement
 ---
 
 ## 🗂️ Project Structure
+<<<<<<< HEAD
+=======
+```
+>>>>>>> a2a09cff9927c717769ccac64a902287f54ddd19
 intern-training-portal/
 │── app/
 │ ├── layout.tsx
@@ -61,8 +65,13 @@ intern-training-portal/
 │── package.json
 │── tsconfig.json
 │── next.config.ts
+<<<<<<< HEAD
 ---
 
+=======
+
+```
+>>>>>>> a2a09cff9927c717769ccac64a902287f54ddd19
 ## ⚙️ Installation & Setup
 
 ### 1️⃣ Clone the repository
